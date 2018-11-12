@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -15,10 +16,12 @@ mongoose.connect("mongodb+srv://rchen102:BUqCwla3YWjNO1qH@microblog-db-k7kzd.mon
 	});
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use('/images',express.static(path.join('images')));
+
 app.use(cors());
-
 app.use('/api/posts', postsRoutes);   // filter: only path starts with the url
-
 
 app.listen(3000, () => {
 	console.log('app is running on port 3000');
