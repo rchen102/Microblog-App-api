@@ -15,13 +15,12 @@ router.post('/signup', (req, res) => {
       user.save()
         .then(result => {
           res.status(201).json({
-            message: 'User created',
-            result: result
+            message: 'User created successfully!'
           })
         })
         .catch(err => {
           res.status(500).json({
-            error: err
+            message: 'Invalid authentication credentials!\n Email Address already exist!'
           });
         });
     });
@@ -30,7 +29,7 @@ router.post('/signup', (req, res) => {
 router.post('/login', (req, res) => {
   let fetchedUser;
   User.findOne({ email: req.body.email })
-    .then(user => {
+    .then(user => {    // Find user and assign it to fetchedUser
       if (!user) {   // can not find the email
         // why return here, because we do not want code continue to excute if user doesnot exist
         return res.status(401).json({  
@@ -48,19 +47,20 @@ router.post('/login', (req, res) => {
       }
       // Create token
       const token = jwt.sign(
-        { email: fetchedUser.email, fetchedUserId: fetchedUser._id }, 
+        { email: fetchedUser.email, userId: fetchedUser._id }, 
         'secret_this_should_be_longer',
         { expiresIn: '1h' }
       );
       res.status(200).json({
         message: "Auth successful",
         token: token,
-        expiresIn: 3600  // 3600 s = 1 h
+        expiresIn: 3600,  // 3600 s = 1 h
+        userId: fetchedUser._id
       })
     })
     .catch(err => {
       return res.status(401).json({
-        message: "Auth failed"
+        message: "Please enter right Email or Password!"
       });
     });
 })
