@@ -8,7 +8,7 @@ const postsRoutes = require('./routes/posts');
 const usersRoutes = require('./routes/users');
 
 const app = express();
-mongoose.connect("mongodb+srv://rchen102:BUqCwla3YWjNO1qH@microblog-db-k7kzd.mongodb.net/microblog?retryWrites=true", { useNewUrlParser: true })
+mongoose.connect("mongodb+srv://rchen102:" + process.env.MONGO_ATLAS_PW + "@microblog-db-k7kzd.mongodb.net/microblog?retryWrites=true", { useNewUrlParser: true })
   .then(() => {
     console.log("Connected to database!");
   })
